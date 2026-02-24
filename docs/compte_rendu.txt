@@ -1,0 +1,196 @@
+compte admin :
+admin@example.com
+admin
+
+compte autre :
+amandine
+Coucou1234*
+
+2.2.1 Exercice d'administration
+
+3. Visualisez le résultat de vos saisies dans l'interface d'admin.
+- Voyez-vous tous les attributs de vos classes ? non
+- Pouvez-vous filtrer vos données suivants tous les attributs ? non
+- Pouvez-vous trier vos données suivants tous les attributs ? non
+- Pouvez-vous chercher un contenu parmi tous les champs ? non
+
+Après la mise en place des classes QuestionAdmin :
+
+- list_display = ("question_text", "pub_date")
+    -> permet d'afficher les colonnes "question_text" et "pub_date"
+- list_filter = ["question_text", "pub_date"]
+    -> permet d'afficher un menu à gauche pour filtrer le résultat par "question_text" ou "pub_date"
+- ordering = ["-pub_date"]
+    -> permet d'afficher les questions par ordre chronologique en ayant la date de publication la plus récente en haut
+- search_fields = ["question_text", "pub_date"]
+    -> permet d'afficher une barre de recherche dans laquelle on peut taper un mot clé qui sera recherché dans l'ensemble des colonnes
+
+Après la mise en place des classes ChoiceAdmin :
+
+- list_display = ("choice_text", "question", "votes")
+    -> permet d'afficher les colonnes "choice_text", "question" et "votes"
+- list_filter = ["choice_text", "question", "votes"]
+    -> permet d'afficher un menu à gauche pour filtrer le résultat par "choice_text" ou "question" ou "votes"
+- ordering = [-question]
+    -> permet de rassembler les choix par questions et de trier les questions par ordre alphabétique
+- search_fields = ["choice_text", "question", "votes"]
+    -> permet d'afficher une barre de recherche dans laquelle on peut taper un mot clé qui sera recherché dans l'ensemble des colonnes
+
+5. Ajoutez un nouvel utilisateur via l'interface d'admin. Ne lui donnez pas le "Statut équipe" ni le "Statut super-utilisateur".
+Déconnectez-vous et essayer de vous reconnecter avec ce nouveau compte. Y parvenez-vous ? non
+
+En cochant la case statut équipe -> je peux me connecter sur l'espace admin mais je n'ai pas la permission de voir ou modifier. Je peux modifier mon mot de passe
+En cochant la case super-utilisateur -> je ne peux pas me connecter à l'espace admin
+En cochant la case statut équipe et super-utilisateur -> je me connecte sur l'espace admin et j'ai les mêmes droits que l'admin
+
+7. Pour ne pas le supprimer on décoche statut équipe et statut super-utilisateur
+
+2.2.2 Exercice shell
+
+pour lancer le shell Django :
+-> python manage.py shell
+
+1. Lister tous les objets de type Question :
+-> questions = Question.objects.all()
+-> for question in questions: print(question)
++ double entrée
+
+
+2. Ajoutez un filtre sur la date de publication
+
+-> afficher les questions de 2025
+    --> questions = Question.objects.filter(pub_date__year="2025")
+    --> for question in questions: print(question)
+- résultat :
+        Le duel ultime du réconfort hivernal : le 2025-04-23 12:07:00+00:00
+        Votre péché mignon au dessert ? le 2025-11-19 13:17:00+00:00
+        La meilleure façon de manger des pâtes ? le 2025-03-23 05:00:00+00:00
+
+-> afficher les questions du mois de février
+    --> questions = Question.objects.filter(pub_date__month="2")
+    --> for question in questions: print(question)
+-> résultat :
+        What's up ? le 2026-02-23 12:58:39+00:00
+        Le meilleur plat du dimanche soir ? le 2026-02-11 11:00:00+00:00
+
+-> afficher les questions du 23ème jour
+    --> questions = Question.objects.filter(pub_date__day="23")
+    --> for question in questions: print(question)
+-> résultat:
+        What's up ? le 2026-02-23 12:58:39+00:00
+        Le duel ultime du réconfort hivernal : le 2025-04-23 12:07:00+00:00
+        La meilleure façon de manger des pâtes ? le 2025-03-23 05:00:00+00:00
+
+-> afficher les questions de 2025 ET du mois d'avril
+    --> questions = Question.objects.filter(pub_date__year="2025").filter(pub_date__month="4")
+    --> for question in questions: print(question)
+-> résultat:
+        Le duel ultime du réconfort hivernal : le 2025-04-23 12:07:00+00:00
+
+
+3. Afficher une question avec id et afficher ses choix
+        --> question = Question.objects.get(id="2")
+        --> print(question)
+        --> choices = question.choice_set.all()
+        --> for choice in choices: print(choice)
+-> résultat:
+        Le duel ultime du réconfort hivernal : le 2025-04-23 12:07:00+00:00
+
+
+4. Faites une boucle pour afficher les attributs de chaque question et leurs choix associés
+        --> questions = Question.objects.all()
+        --> for question in questions:
+                print(question)
+                choices = question.choice_set.all()
+                for choice in choices:
+                    print(choice)
+-> résultat:
+        What's up ? le 2026-02-23 12:58:39+00:00
+        Choix : Not much
+        Choix : The sky
+        Le duel ultime du réconfort hivernal : le 2025-04-23 12:07:00+00:00
+        Choix : Tartiflette
+        Choix : Raclette
+        Choix : Fondue
+        Choix : Welsh
+        L'éternel débat de la boulangerie ? le 2026-01-08 05:00:00+00:00
+        Choix : Pain au chocolat
+        Choix : Chocolatine
+        Choix : Croissant au beurre
+        Votre péché mignon au dessert ? le 2025-11-19 13:17:00+00:00
+        Choix : Tiramisu onctueux
+        Choix : Mousse au chocolat
+        Choix : Tarte au citron meringuée
+        La meilleure façon de manger des pâtes ? le 2025-03-23 05:00:00+00:00
+        Choix : Carbonara
+        Choix : Bolognaise
+        Choix : Pesto basilic frais
+        Le meilleur plat du dimanche soir ? le 2026-02-11 11:00:00+00:00
+        Choix : Une Pizza bien garnie
+        Choix : Des Sushi ultra frais
+        Choix : Un Burger "maison"
+
+
+5. Affichez le nombre de choix enregistrés pour chaque question.
+        --> question = Question.objects.get(id="2")
+        --> choices_nb = question.choice_set.all().count()
+        --> print(choices_nb)
+-> résultat: 3
+
+7. Triez les questions par ordre antéchronologique.
+        --> questions = Question.objects.all().order_by("-question_text")
+        --> for question in questions:
+                print(question)
+                choices = question.choice_set.all()
+                for choice in choices:
+                   print(choice)
+-> résultat:
+        What's up ? le 2026-02-23 12:58:39+00:00
+        Choix : Not much
+        Choix : The sky
+        Votre péché mignon au dessert ? le 2025-11-19 13:17:00+00:00
+        Choix : Tiramisu onctueux
+        Choix : Mousse au chocolat
+        Choix : Tarte au citron meringuée
+        Le meilleur plat du dimanche soir ? le 2026-02-11 11:00:00+00:00
+        Choix : Une Pizza bien garnie
+        Choix : Des Sushi ultra frais
+        Choix : Un Burger "maison"
+        Le duel ultime du réconfort hivernal : le 2025-04-23 12:07:00+00:00
+        Choix : Tartiflette
+        Choix : Raclette
+        Choix : Fondue
+        Choix : Welsh
+        La meilleure façon de manger des pâtes ? le 2025-03-23 05:00:00+00:00
+        Choix : Carbonara
+        Choix : Bolognaise
+        Choix : Pesto basilic frais
+        L'éternel débat de la boulangerie ? le 2026-01-08 05:00:00+00:00
+        Choix : Pain au chocolat
+        Choix : Chocolatine
+        Choix : Croissant au beurre
+
+9. Créez une question en utilisant le shell.
+        --> from django.utils import timezone
+        --> Question.objects.create(question_text="Est-ce que Django est un aliment ?", pub_date=timezone.now())
+
+10. Ajoutez 3 choix à cette question en utilisant le shell.
+
+--> question = Question.objects.get(id="7")
+--> question.choice_set.create(choice_text="oui", votes=0)
+    <Choice: Choix : oui>
+--> question.choice_set.create(choice_text="non", votes=0)
+    <Choice: Choix : non>
+--> question.choice_set.all()
+    <QuerySet [<Choice: Choix : oui>, <Choice: Choix : non>]>
+--> choice = question.choice_set.create(choice_text="je ne sais pas", votes=0)
+--> choice.question
+    <Question: Est-ce que Django est un aliment ? le 2026-02-24 10:34:46.979651+00:00>
+
+ 11. Listez les questions publiées récemment.
+         --> q = Question.objects.all().filter(pub_date__month="2").filter(pub_date__year="2026")
+         --> for question in q: print(question)
+-> résultat:
+        What's up ? le 2026-02-23 12:58:39+00:00
+        Le meilleur plat du dimanche soir ? le 2026-02-11 11:00:00+00:00
+        Est-ce que Django est un aliment ? le 2026-02-24 10:34:46.979651+00:00
