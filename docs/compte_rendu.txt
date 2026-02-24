@@ -138,7 +138,7 @@ pour lancer le shell Django :
 -> résultat: 3
 
 7. Triez les questions par ordre antéchronologique.
-        --> questions = Question.objects.all().order_by("-question_text")
+        --> questions = Question.objects.all().order_by("-pub_date")
         --> for question in questions:
                 print(question)
                 choices = question.choice_set.all()
