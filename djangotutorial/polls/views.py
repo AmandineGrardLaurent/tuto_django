@@ -1,4 +1,4 @@
-from django.db.models import F
+from django.db.models import F, Sum
 from django.db.models import F
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
@@ -22,6 +22,7 @@ def results(request, question_id):
     return render(request, "polls/results.html", {"question": question})
 """
 
+
 class IndexView(generic.ListView):
     template_name = "polls/index.html"
     context_object_name = "latest_question_list"
@@ -30,11 +31,14 @@ class IndexView(generic.ListView):
         """Return the last five published questions."""
         return Question.objects.order_by("-pub_date")[:5]
 
+
 class AllView(generic.ListView):
     template_name = "polls/all.html"
     context_object_name = "question_list"
+
     def get_queryset(self):
         return Question.objects.order_by("id")
+
 
 class DetailView(generic.DetailView):
     model = Question
@@ -45,9 +49,33 @@ class ResultsView(generic.DetailView):
     model = Question
     template_name = "polls/results.html"
 
+
 class FrequencyView(generic.DetailView):
     model = Question
     template_name = "polls/frequency.html"
+
+
+class StatisticsView(generic.ListView):
+    template_name = "polls/statistics.html"
+    context_object_name = "question_list"
+
+    def get_queryset(self):
+        return Question.objects.order_by("id")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        total_questions = Question.objects.count()
+        total_votes = Choice.objects.aggregate(Sum('votes'))['votes__sum'] or 0
+        total_choices = Choice.objects.count()
+        vote_average = (total_votes / total_questions) if total_questions > 0 else 0
+
+        context['choices_count'] = total_choices
+        context['questions_count'] = total_questions
+        context['votes_count'] = total_votes
+        context['votes_average_by_question'] = vote_average
+        return context
+
 
 def vote(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
