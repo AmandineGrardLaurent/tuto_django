@@ -24,65 +24,126 @@ def results(request, question_id):
 
 
 class IndexView(generic.ListView):
+    """
+    Affiche la liste des derniers sondages publiés.
+
+    Utilise le gabarit 'polls/index.html' et fournit les 5 questions
+    les plus récentes sous la variable 'latest_question_list'.
+    """
     template_name = "polls/index.html"
     context_object_name = "latest_question_list"
 
     def get_queryset(self):
-        """Return the last five published questions."""
+        """ Retourne les cinq dernières questions publiées """
         return Question.objects.order_by("-pub_date")[:5]
 
 
 class AllView(generic.ListView):
+    """
+    Affiche l'intégralité des sondages présents en base de données.
+
+    Trié par identifiant (ID) croissant.
+    """
     template_name = "polls/all.html"
     context_object_name = "question_list"
 
     def get_queryset(self):
+        """Retourne toutes les questions triées par ID."""
         return Question.objects.order_by("id")
 
 
 class DetailView(generic.DetailView):
+    """
+    Affiche le formulaire de vote pour une question spécifique.
+
+    L'identifiant de la question est récupéré via l'URL (pk).
+    """
     model = Question
     template_name = "polls/detail.html"
 
 
 class ResultsView(generic.DetailView):
+    """
+    Affiche les résultats d'un sondage spécifique après un vote.
+    """
     model = Question
     template_name = "polls/results.html"
 
 
 class FrequencyView(generic.DetailView):
+    """
+    Affiche les statistiques détaillées (fréquences) d'un sondage.
+    """
     model = Question
     template_name = "polls/frequency.html"
 
 
 class StatisticsView(generic.ListView):
+    """
+    Vue globale calculant des statistiques transversales sur l'application.
+
+    Cette vue calcule :
+    - Le nombre total de questions, choix et votes.
+    - La moyenne de votes par question.
+    - La question la plus populaire (best_question).
+    - La question la moins populaire (worst_question).
+    """
     template_name = "polls/statistics.html"
     context_object_name = "question_list"
 
     def get_queryset(self):
+        """Retourne la liste des questions pour affichage détaillé."""
         return Question.objects.order_by("id")
 
     def get_context_data(self, **kwargs):
+        """
+        Enrichit le contexte avec des agrégations et des annotations globales.
+        """
         context = super().get_context_data(**kwargs)
 
         total_questions = Question.objects.count()
         total_votes = Choice.objects.aggregate(Sum('votes'))['votes__sum'] or 0
         total_choices = Choice.objects.count()
+
+        # Calcul de la moyenne arithmétique de participation
         vote_average = (total_votes / total_questions) if total_questions > 0 else 0
+
+        # Identification des extrêmes via l'annotation (calcul par ligne)
+        # On ajoute une colonne virtuelle 'total_votes_count' pour trier les questions
+        best_question = Question.objects.annotate(
+            total_votes_count=Sum('choice__votes')
+        ).order_by('-total_votes_count').first()
+        worst_question = Question.objects.annotate(
+            total_votes_count=Sum('choice__votes')
+        ).order_by('-total_votes_count').last()
 
         context['choices_count'] = total_choices
         context['questions_count'] = total_questions
         context['votes_count'] = total_votes
         context['votes_average_by_question'] = vote_average
+        context['best_question'] = best_question
+        context['worst_question'] = worst_question
+
         return context
 
 
 def vote(request, question_id):
+    """
+    Gère la soumission d'un vote pour une question donnée.
+
+    Vérifie la présence d'un choix dans les données POST.
+    En cas de succès, incrémente le compteur de votes de manière atomique
+    via F() et redirige vers la vue 'frequency'.
+
+    :param request: L'objet HttpRequest
+    :param question_id: L'ID de la question concernée
+    :return: Une redirection vers les résultats ou un ré-affichage du formulaire avec erreur
+    """
     question = get_object_or_404(Question, pk=question_id)
     try:
         selected_choice = question.choice_set.get(pk=request.POST["choice"])
     except (KeyError, Choice.DoesNotExist):
-        # Redisplay the question voting form.
+        # Réaffiche le formulaire de vote avec un message d'erreur.
         return render(
             request,
             "polls/detail.html",
@@ -92,9 +153,9 @@ def vote(request, question_id):
             },
         )
     else:
+        # Utilisation de F() pour demander à la base de données d'incrémenter
         selected_choice.votes = F("votes") + 1
         selected_choice.save()
-        # Always return an HttpResponseRedirect after successfully dealing
-        # with POST data. This prevents data from being posted twice if a
-        # user hits the Back button.
+
+        # Redirection après succès POST pour éviter les doubles soumissions
         return HttpResponseRedirect(reverse("polls:frequency", args=(question.id,)))

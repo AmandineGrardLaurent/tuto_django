@@ -39,7 +39,7 @@ class Question(models.Model):
 
         Affiche la date de publication suivie d'un extrait du texte.
         """
-        return "{} {}".format(self.pub_date, text_excerpt(self.question_text, MAX_LENGTH))
+        return "{} {}".format(text_excerpt(self.question_text, MAX_LENGTH), self.pub_date)
 
     def was_published_recently(self):
         """

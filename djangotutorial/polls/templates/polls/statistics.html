@@ -3,5 +3,7 @@
     <p>Nombre total de choix possibles sur le site : {{choices_count}}</p>
     <p>Nombre total de votes enregistrés sur le site : {{votes_count}}</p>
     <p>Moyenne de votes par sondage : <strong>{{ votes_average_by_question }}</strong></p>
+    <p>La question la plus populaire : {{ best_question }}</p>
+    <p>La question la moins populaire : {{ worst_question }}</p>
 
 <a href="{% url 'polls:index' %}"><< Retour >></a>
