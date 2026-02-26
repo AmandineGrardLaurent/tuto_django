@@ -5,11 +5,13 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views import generic
 import logging
+from .models import Choice, Question
 
 # pour garder une trace des erreurs dans les logs
 logger = logging.getLogger(__name__)
 
-from .models import Choice, Question
+URL_POLL_FORM = "polls/poll_form.html"
+
 
 """
 def index(request):
@@ -194,15 +196,15 @@ def poll(request):
 
         except ValueError as e:
             # Erreur de validation
-            return render(request, "polls/poll_form.html", {
+            return render(request, URL_POLL_FORM, {
                 "error_message": str(e)
             })
         except Exception as e:
             # Erreur imprévue
             logger.error(f"Erreur lors de la création du sondage : {e}")
-            return render(request, "polls/poll_form.html", {
+            return render(request, URL_POLL_FORM, {
                 "error_message": "Une erreur technique est survenue. Réessayez plus tard."
             })
 
-    return render(request, "polls/poll_form.html")
+    return render(request, URL_POLL_FORM)
 
