@@ -1,8 +1,13 @@
 from django.db.models import F, Sum
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
+from django.utils import timezone
 from django.views import generic
+import logging
+
+# pour garder une trace des erreurs dans les logs
+logger = logging.getLogger(__name__)
 
 from .models import Choice, Question
 
@@ -161,3 +166,43 @@ def vote(request, question_id):
 
         # Redirection après succès POST pour éviter les doubles soumissions
         return HttpResponseRedirect(reverse("polls:frequency", args=(question.id,)))
+
+def poll(request):
+    """
+    Gère la création d'un sondage : affiche le formulaire (GET)
+    ou enregistre la question et redirige vers l'index (POST).
+
+    :param request: L'objet HttpRequest.
+    :return: HttpResponseRedirect vers l'index ou rendu du formulaire avec erreur.
+    """
+    if request.method == "POST":
+        try:
+            # Récupération du formulaire
+            text = request.POST.get("question_text")
+            if not text or text.strip() == "":
+                raise ValueError("Le texte de la question est obligatoire.")
+
+            # Sauvegarde de la question
+            new_question = Question(
+                question_text=text,
+                pub_date=timezone.now()
+            )
+            new_question.save()
+
+            # Redirection
+            return redirect("polls:index")
+
+        except ValueError as e:
+            # Erreur de validation
+            return render(request, "polls/poll_form.html", {
+                "error_message": str(e)
+            })
+        except Exception as e:
+            # Erreur imprévue
+            logger.error(f"Erreur lors de la création du sondage : {e}")
+            return render(request, "polls/poll_form.html", {
+                "error_message": "Une erreur technique est survenue. Réessayez plus tard."
+            })
+
+    return render(request, "polls/poll_form.html")
+

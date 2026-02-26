@@ -11,6 +11,8 @@
     <a href="{% url 'polls:all' %}"><< Accès vers toutes les questions ici >></a>
     <br>
     <a href="{% url 'polls:statistics' %}"><< Accès aux statistiques ici >></a>
+    <br>
+    <a href="{% url 'polls:poll' %}"><< Accès au formulaire de création d'une nouvelle question >></a>
 {% else %}
     <p>No polls are available.</p>
 {% endif %}

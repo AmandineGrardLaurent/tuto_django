@@ -5,6 +5,7 @@ from . import views
 app_name = "polls"
 urlpatterns = [
     path("", views.IndexView.as_view(), name="index"),
+    path("add_poll", views.poll, name="poll"),
     path("all", views.AllView.as_view(), name="all"),
     path("statistics", views.StatisticsView.as_view(), name="statistics"),
     path("<int:pk>/", views.DetailView.as_view(), name="detail"),
