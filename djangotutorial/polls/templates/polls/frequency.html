@@ -2,7 +2,7 @@
 
 <ul>
 {% for choice_text, choice_votes, choice_percentage in question.get_choices %}
-    <li>{{ choice_text }} -- {{ choice_votes }} vote{{ choice_votes|pluralize }} soit {{ choice_percentage }}</li>
+    <li>{{ choice_text }} -- {{ choice_votes }} vote{{ choice_votes|pluralize }} soit {{ choice_percentage | floatformat:1 }} %</li>
 {% endfor %}
 </ul>
 
