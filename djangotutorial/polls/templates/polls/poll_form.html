@@ -3,10 +3,17 @@
     <fieldset>
         {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
         <legend><h1>Ajouter une nouvelle question</h1></legend>
-    <label for="question_text">Votre question :</label>
-    <input type="text" name="question_text" id="question_text" placeholder="what else ?">
-
-    <button type="submit">Enregistrer la question</button>
+        <label for="question_text">Votre question :</label>
+        <input type="text" name="question_text" id="question_text" placeholder="what else ?">
+        <br>
+        <label>Options (facultatif) :</label><br>
+        {% for i in choice_range %}
+                <label>Choix {{ i }} : </label>
+                <input type="text" name="choice_text" placeholder="Choix {{ forloop.counter }}">
+        <br>
+        {% endfor %}
+        <br>
+        <button type="submit">Enregistrer la question</button>
     </fieldset>
 </form>
 

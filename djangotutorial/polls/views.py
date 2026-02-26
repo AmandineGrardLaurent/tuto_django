@@ -152,7 +152,7 @@ def vote(request, question_id):
     try:
         selected_choice = question.choice_set.get(pk=request.POST["choice"])
     except (KeyError, Choice.DoesNotExist):
-        # Réaffiche le formulaire de vote avec un message d'erreur.
+        # Ré-affiche le formulaire de vote avec un message d'erreur.
         return render(
             request,
             "polls/detail.html",
@@ -177,19 +177,28 @@ def poll(request):
     :param request: L'objet HttpRequest.
     :return: HttpResponseRedirect vers l'index ou rendu du formulaire avec erreur.
     """
+
     if request.method == "POST":
         try:
             # Récupération du formulaire
             text = request.POST.get("question_text")
             if not text or text.strip() == "":
-                raise ValueError("Le texte de la question est obligatoire.")
+                raise ValueError("La question ne peut pas être vide.")
 
             # Sauvegarde de la question
-            new_question = Question(
+            new_question = Question.objects.create(
                 question_text=text,
                 pub_date=timezone.now()
             )
-            new_question.save()
+
+            # Récupération et création des choix (non vides)
+            choices = request.POST.getlist("choice_text")
+            for choice_text in choices:
+                if choice_text.strip():
+                    new_question.choice_set.create(
+                        choice_text=choice_text,
+                        votes=0
+                    )
 
             # Redirection
             return redirect("polls:index")
@@ -206,5 +215,6 @@ def poll(request):
                 "error_message": "Une erreur technique est survenue. Réessayez plus tard."
             })
 
-    return render(request, URL_POLL_FORM)
+    return render(request, URL_POLL_FORM, {"choice_range": range(1, 6)})
+
 
