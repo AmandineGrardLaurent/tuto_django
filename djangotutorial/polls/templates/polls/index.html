@@ -1,18 +1,24 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'polls/style.css' %}">
+
 {% if latest_question_list %}
-    <h1>Les dernières questions : </h1>
-    <ul>
-    {% for question in latest_question_list %}
-        <li>
-            <a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a>
-            <p>-- publiée le {{ question.pub_date}} --</p>
-        </li>
-    {% endfor %}
-    </ul>
-    <a href="{% url 'polls:all' %}"><< Accès vers toutes les questions ici >></a>
-    <br>
-    <a href="{% url 'polls:statistics' %}"><< Accès aux statistiques ici >></a>
-    <br>
-    <a href="{% url 'polls:poll' %}"><< Accès au formulaire de création d'une nouvelle question >></a>
+    <section>
+        <h1>Les dernières questions : </h1>
+        <ul>
+        {% for question in latest_question_list %}
+            <li>
+                <a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a>
+                <p>-- publiée le {{ question.pub_date}} --</p>
+            </li>
+        {% endfor %}
+        </ul>
+        <a href="{% url 'polls:all' %}"><< Accès vers toutes les questions ici >></a>
+        <br>
+        <a href="{% url 'polls:statistics' %}"><< Accès aux statistiques ici >></a>
+        <br>
+        <a href="{% url 'polls:poll' %}"><< Accès au formulaire de création d'une nouvelle question >></a>
+    </section>
 {% else %}
     <p>No polls are available.</p>
 {% endif %}

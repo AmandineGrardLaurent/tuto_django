@@ -1,0 +1,19 @@
+li a {
+    color: brown;
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+section {
+    background: white;
+    opacity: 0.5;
+    border-radius: 3rem;
+    padding: 2rem 3rem;
+}
+
+body {
+    background: white url("images/background.jpg") no-repeat;
+    background-size: cover;
+    background-position: center;
+}
