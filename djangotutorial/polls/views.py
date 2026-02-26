@@ -1,5 +1,4 @@
 from django.db.models import F, Sum
-from django.db.models import F
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
@@ -117,12 +116,15 @@ class StatisticsView(generic.ListView):
             total_votes_count=Sum('choice__votes')
         ).order_by('-total_votes_count').last()
 
+        last_question = Question.objects.order_by('id').last()
+
         context['choices_count'] = total_choices
         context['questions_count'] = total_questions
         context['votes_count'] = total_votes
         context['votes_average_by_question'] = vote_average
         context['best_question'] = best_question
         context['worst_question'] = worst_question
+        context['last_question'] = last_question
 
         return context
 
