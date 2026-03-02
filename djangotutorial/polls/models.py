@@ -34,12 +34,6 @@ class Question(models.Model):
     question_text = models.CharField(max_length=200)
     pub_date = models.DateTimeField("date published")
 
-    @admin.display(
-        boolean=True,
-        ordering="pub_date",
-        description="Published recently?",
-    )
-
     def __str__(self):
         """
         Représentation texte de la question.
@@ -47,6 +41,12 @@ class Question(models.Model):
         Affiche la date de publication suivie d'un extrait du texte.
         """
         return "{} {}".format(text_excerpt(self.question_text, MAX_LENGTH), self.pub_date)
+
+    @admin.display(
+        boolean=True,
+        ordering="pub_date",
+        description="Published recently?",
+    )
 
     def was_published_recently(self):
         """

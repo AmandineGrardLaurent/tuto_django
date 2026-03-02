@@ -5,13 +5,13 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views import generic
 import logging
+from .forms import QuestionForm, ChoiceFormSet
 from .models import Choice, Question
 
 # pour garder une trace des erreurs dans les logs
 logger = logging.getLogger(__name__)
 
 URL_POLL_FORM = "polls/poll_form.html"
-
 
 """
 def index(request):
@@ -169,14 +169,82 @@ def vote(request, question_id):
         # Redirection après succès POST pour éviter les doubles soumissions
         return HttpResponseRedirect(reverse("polls:frequency", args=(question.id,)))
 
+
 def poll(request):
     """
+    Vue pour créer une nouvelle question de sondage avec ses choix.
+
+    Cette vue gère à la fois l'affichage du formulaire (GET) et la soumission (POST).
+
+    Fonctionnement :
+    1. Si la requête est POST :
+        - Crée un QuestionForm avec les données soumises.
+        - Si le formulaire Question est valide :
+            - Crée un ChoiceFormSet lié à la question (mais non encore sauvegardé)
+            - Si le formset est valide :
+                - Enregistre la question avec la date de publication actuelle
+                - Lie le formset à l'instance de la question et sauvegarde les choix
+                - Redirige vers l'index des sondages
+        - Si le formulaire Question n'est pas valide, on initialise un formset vide pour l'affichage.
+    2. Si la requête est GET :
+        - Crée un formulaire QuestionForm vide
+        - Crée un ChoiceFormSet vide (avec les champs vides prédéfinis par extra)
+
+    Args:
+        request (HttpRequest) : Objet contenant la requête HTTP (GET ou POST)
+
+    Returns:
+        HttpResponse : rendu du formulaire ou redirection vers l'index après succès
+    """
+
+    # --- requête POST ---
+    if request.method == "POST":
+        # Création du formulaire Question avec les données POST
+        form = QuestionForm(request.POST)
+        if form.is_valid():
+            # Crée un formset de Choice lié à l'instance Question (non encore sauvegardée)
+            formset = ChoiceFormSet(request.POST, instance=form.save(commit=False))
+
+            if formset.is_valid():
+                # Enregistrement de la question avec date actuelle
+                question = form.save(commit=False)
+                question.pub_date = timezone.now()
+                question.save()
+
+                # Lie le formset à la question sauvegardée
+                formset.instance = question
+                # Enregistre tous les choix du formset
+                formset.save()
+
+                # Redirection vers la page d'accueil des sondages
+                return redirect("polls:index")
+        else:
+            # Si QuestionForm invalide, on crée un formset vide pour affichage
+            formset = ChoiceFormSet()
+
+    # --- requête GET ---
+    else:
+        # formulaire vide pour la question
+        form = QuestionForm()
+        # formset vide pour les choix
+        formset = ChoiceFormSet()
+
+    # --- Rendu du template avec les formulaires ---
+    return render(request, "polls/poll_form.html", {
+        "form": form,
+        "formset": formset
+    })
+
+
+"""
+def poll(request):
+    
     Gère la création d'un sondage : affiche le formulaire (GET)
     ou enregistre la question et redirige vers l'index (POST).
 
     :param request: L'objet HttpRequest.
     :return: HttpResponseRedirect vers l'index ou rendu du formulaire avec erreur.
-    """
+    
 
     if request.method == "POST":
         try:
@@ -216,5 +284,4 @@ def poll(request):
             })
 
     return render(request, URL_POLL_FORM, {"choice_range": range(1, 6)})
-
-
+"""
