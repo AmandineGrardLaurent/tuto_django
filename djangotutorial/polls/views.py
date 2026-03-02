@@ -190,11 +190,8 @@ def poll(request):
         - Crée un formulaire QuestionForm vide
         - Crée un ChoiceFormSet vide (avec les champs vides prédéfinis par extra)
 
-    Args:
-        request (HttpRequest) : Objet contenant la requête HTTP (GET ou POST)
-
-    Returns:
-        HttpResponse : rendu du formulaire ou redirection vers l'index après succès
+    :param request (HttpRequest) : Objet contenant la requête HTTP (GET ou POST)
+    :return : HttpResponse : rendu du formulaire ou redirection vers l'index après succès
     """
 
     # --- requête POST ---
