@@ -89,7 +89,7 @@ ChoiceFormSet = inlineformset_factory(
     fields=("choice_text",),
     # Nombre d'inputs vides supplémentaires affichés
     extra=2,
-    # Nombre minimum de formulaires requis
+    # Nombre minimum de choix requis
     min_num=3,
     # Active la validation du minimum
     validate_min=True,

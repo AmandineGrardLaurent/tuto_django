@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'polls/style.css' %}">
+{% endblock %}
+
 {% block title %}Ajout d'un sondage{% endblock %}
 
 {% block header %}
@@ -53,7 +57,7 @@
     </fieldset>
 </form>
 
-<a href="{% url 'polls:index' %}">Annuler</a>
+<button><a href="{% url 'polls:index' %}">Retour</a></button>
 
 {% endblock main %}
 

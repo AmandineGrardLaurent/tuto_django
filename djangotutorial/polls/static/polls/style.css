@@ -1,19 +1,23 @@
-li a {
-    color: brown;
+body {
+    font-family: "Verdana", "Helvetica", "Arial", sans-serif;
+}
+
+a {
     text-decoration: none;
     font-size: 20px;
-    font-weight: bold;
+    color: black;
 }
 
-section {
-    background: white;
-    opacity: 0.5;
-    border-radius: 3rem;
-    padding: 2rem 3rem;
+button a {
+    font-size: 15px;
 }
 
-body {
-    background: white url("images/background.jpg") no-repeat;
-    background-size: cover;
-    background-position: center;
+button {
+    margin: 0.5rem 1rem;
+}
+
+
+.p-pub_date {
+    padding: 0 4em;
+    color: grey;
 }

@@ -1,4 +1,10 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'polls/style.css' %}">
+{% endblock %}
+
 {% block title %}Résultat du sondage{% endblock %}
 
 {% block main %}
@@ -11,6 +17,6 @@
         </ul>
 </fieldset>
 
-<a href="{% url 'polls:detail' question.id %}">Retour au vote</a>
+<button><a href="{% url 'polls:index' %}">Retour</a></button>
 
 {% endblock main %}

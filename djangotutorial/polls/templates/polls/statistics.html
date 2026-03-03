@@ -1,4 +1,10 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'polls/style.css' %}">
+{% endblock %}
+
 {% block title %}Statistiques{% endblock %}
 
 {% block main %}
@@ -13,6 +19,6 @@
     <p>La question la moins populaire : {{ worst_question }}</p>
     <p>La dernière question : {{ last_question }}</p>
 </fieldset>
-<a href="{% url 'polls:index' %}"><< Retour >></a>
+<button><a href="{% url 'polls:index' %}">Retour</a></button>
 
 {% endblock main %}

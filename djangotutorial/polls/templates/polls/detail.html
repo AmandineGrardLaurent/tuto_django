@@ -1,4 +1,10 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'polls/style.css' %}">
+{% endblock %}
+
 {% block title %}Page pour voter{% endblock %}
 
 {% block main %}
@@ -14,6 +20,6 @@
 </fieldset>
 <input type="submit" value="Vote">
 </form>
-<a href="{% url 'polls:index' %}"><< Retour >></a>
+<button><a href="{% url 'polls:index' %}">Retour</a></button>
 
 {% endblock main %}
