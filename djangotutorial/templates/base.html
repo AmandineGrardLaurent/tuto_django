@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% block title %}
+            Tuto Django
+        {% endblock title %}
+    </title>
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <header>
+        <div id="header">
+            {% block header %}
+            {% endblock header %}
+        </div>
+    </header>
+    <main>
+        <div id="main">
+            {% block main %}
+            {% endblock main %}
+        </div>
+    </main>
+</body>
+</html>

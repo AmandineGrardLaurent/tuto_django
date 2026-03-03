@@ -1,4 +1,10 @@
-<h1>Statistiques</h1>
+{% extends "base.html" %}
+{% block title %}Statistiques{% endblock %}
+
+{% block main %}
+
+<fieldset>
+<legend><h1>Statistiques</h1></legend>
     <p>Nombre total de sondages enregistrés sur le site : {{questions_count}}</p>
     <p>Nombre total de choix possibles sur le site : {{choices_count}}</p>
     <p>Nombre total de votes enregistrés sur le site : {{votes_count}}</p>
@@ -6,5 +12,7 @@
     <p>La question la plus populaire : {{ best_question }}</p>
     <p>La question la moins populaire : {{ worst_question }}</p>
     <p>La dernière question : {{ last_question }}</p>
-
+</fieldset>
 <a href="{% url 'polls:index' %}"><< Retour >></a>
+
+{% endblock main %}

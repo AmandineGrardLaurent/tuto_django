@@ -1,3 +1,14 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'polls/style.css' %}">
+{% endblock %}
+
+{% block title %}Tous les sondages{% endblock %}
+
+{% block main %}
+<h1>Tous les sondages : </h1>
 {% if question_list %}
     <ul>
     {% for question in question_list %}
@@ -9,3 +20,5 @@
 {% else %}
     <p>No polls are available.</p>
 {% endif %}
+
+{% endblock main%}

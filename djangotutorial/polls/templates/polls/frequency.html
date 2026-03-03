@@ -1,9 +1,16 @@
-<h1>{{ question.question_text }}</h1>
+{% extends "base.html" %}
+{% block title %}Résultat du sondage{% endblock %}
 
-<ul>
-{% for choice_text, choice_votes, choice_percentage in question.get_choices %}
-    <li>{{ choice_text }} -- {{ choice_votes }} vote{{ choice_votes|pluralize }} soit {{ choice_percentage | floatformat:1 }} %</li>
-{% endfor %}
-</ul>
+{% block main %}
+<fieldset>
+    <legend><h1>{{ question.question_text }}</h1></legend>
+        <ul>
+        {% for choice_text, choice_votes, choice_percentage in question.get_choices %}
+            <li>{{ choice_text }} -- {{ choice_votes }} vote{{ choice_votes|pluralize }} soit {{ choice_percentage | floatformat:1 }} %</li>
+        {% endfor %}
+        </ul>
+</fieldset>
 
 <a href="{% url 'polls:detail' question.id %}">Retour au vote</a>
+
+{% endblock main %}
