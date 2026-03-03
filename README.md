@@ -100,22 +100,28 @@ Application de sondages réalisée avec Django permettant de créer des question
 
 2. Créer et activer un environnement virtuel :
 
-```bash
-python -m venv venv
-venv\Scripts\activate
-```
+   ```bash
+   python -m venv venv
+   venv\Scripts\activate
+   ```
 
-3. Appliquer les migrations
+3. Installer les dépendances :
 
-```bash
-python manage.py migrate
-```
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-4. Lancer le serveur de développememt
+4. Appliquer les migrations :
 
-```bash
-python manage.py runserver
-```
+   ```bash
+   python manage.py migrate
+   ```
+
+5. Lancer le serveur de développememt :
+
+   ```bash
+   python manage.py runserver
+   ```
 
 ---
 
