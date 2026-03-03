@@ -86,6 +86,8 @@ Application de sondages réalisée avec Django permettant de créer des question
 - Python 3.13.7
 - Django 5.2.11
 - DB Browser for SQLite
+- npm
+- Node.js
 
 ---
 
@@ -117,7 +119,15 @@ Application de sondages réalisée avec Django permettant de créer des question
    python manage.py migrate
    ```
 
-5. Lancer le serveur de développememt :
+5. Compiler Tailwind CSS : 
+    ```bash
+    python manage.py tailwind start
+    ```
+Cette commande compile automatiquement le CSS Tailwind et met à jour les styles à chaque modification de template ou fichier Tailwind.
+
+Laissez-la tourner en parallèle de runserver pour voir les changements en temps réel.
+
+6. Lancer le serveur de développememt :
 
    ```bash
    python manage.py runserver
@@ -196,3 +206,5 @@ TUTO_DJANGO/
 - Méthodes utilitaires dans le modèle Question pour calculer pourcentages, top choix, âge, etc.
 
 - Formset ChoiceFormSet imposant un nombre minimum de choix pour chaque question.
+
+- Tailwind CSS utilisé pour toutes les pages : boutons, formulaires, cartes de sondages, alignements et responsive design.
