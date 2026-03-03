@@ -1,63 +1,84 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block extra_head %}
-<link rel="stylesheet" href="{% static 'polls/style.css' %}">
-{% endblock %}
-
 {% block title %}Ajout d'un sondage{% endblock %}
 
 {% block header %}
-
+<div class="flex justify-center py-6 bg-gray-100 shadow-sm">
     <img src="{% static 'images/banniere2.avif' %}"
          alt="logo"
-         style="width:10%">
-
+         class="w-24 md:w-32 lg:w-40 rounded-xl shadow-md">
+</div>
 {% endblock %}
 
 {% block main %}
 
-<form method="post">
-    {% csrf_token %}
+<div class="max-w-3xl mx-auto px-4 py-10">
 
-    <fieldset>
-        <legend><h1>Ajouter une nouvelle question</h1></legend>
+    <form method="post" class="bg-white p-6 rounded-2xl shadow-lg space-y-6">
+        {% csrf_token %}
 
-        {% if form.errors %}
-            <div style="color:red;">
-                {{ form.errors }}
+        <fieldset class="space-y-6">
+
+            <legend>
+                <h1 class="text-2xl font-bold text-gray-800 mb-4">Ajouter une nouvelle question</h1>
+            </legend>
+
+            {% if form.errors %}
+                <div class="text-red-500 font-semibold">
+                    {{ form.errors }}
+                </div>
+            {% endif %}
+
+            {# Champ question #}
+            <div class="flex flex-col space-y-1">
+                <label class="font-medium text-gray-700">{{ form.question_text.label }}</label>
+                {{ form.question_text }}
             </div>
-        {% endif %}
 
-        {# Champ question #}
-        <div>
-            {{ form.question_text.label_tag }}
-            {{ form.question_text }}
-        </div>
+            {# Gestion du formset #}
+            {{ formset.management_form }}
 
-        <br>
+            <div class="flex flex-col space-y-2">
+                <span class="font-medium text-gray-700">Choix :</span>
+                 {% for choice_form in formset %}
+                    <div class="flex items-center space-x-3">
+                        {# Numéro du choix #}
+                        <span class="w-6 h-6 flex items-center justify-center bg-gray-200 rounded-full text-gray-700 font-medium">
+                            {{ forloop.counter }}
+                        </span>
 
-        {# Gestion du formset #}
-        {{ formset.management_form }}
-
-        <label>Choix :</label>
-        {% for choice_form in formset %}
-            <div>
-                {{ choice_form.choice_text }}
-                {% if choice_form.errors %}
-                    <div style="color:red;">
-                        {{ choice_form.errors }}
+                        {# Champ input #}
+                        <div class="flex-1">
+                            {{ choice_form.choice_text }}
+                            {% if choice_form.errors %}
+                                <div class="text-red-500 text-sm">
+                                    {{ choice_form.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
                     </div>
-                {% endif %}
+                {% endfor %}
             </div>
-        {% endfor %}
 
-        <br>
-        <button type="submit">Enregistrer la question</button>
-    </fieldset>
-</form>
+            <div>
+                <button type="submit"
+                        class="px-6 py-2 bg-indigo-500 text-white rounded-xl hover:bg-indigo-600 transition shadow">
+                    Enregistrer la question
+                </button>
+            </div>
 
-<button><a href="{% url 'polls:index' %}">Retour</a></button>
+        </fieldset>
+    </form>
+
+    <div class="mt-6 text-center">
+        <a href="{% url 'polls:index' %}"
+           class="inline-block px-6 py-2 bg-gray-800 text-white rounded-xl hover:bg-gray-900 transition shadow">
+            ← Retour à l'accueil
+        </a>
+    </div>
+
+</div>
 
 {% endblock main %}
 

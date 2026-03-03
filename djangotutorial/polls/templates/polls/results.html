@@ -1,22 +1,34 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block extra_head %}
-<link rel="stylesheet" href="{% static 'polls/style.css' %}">
-{% endblock %}
-
-{% block title %}Affichage du résultat des votes{% endblock %}
+{% block title %}Résultat des votes{% endblock %}
 
 {% block main %}
 
-<h1>{{ question.question_text }}</h1>
+<div class="max-w-3xl mx-auto px-4 py-10">
 
-<ul>
-{% for choice in question.choice_set.all %}
-    <li>{{ choice.choice_text }} -- {{ choice.votes }} vote{{ choice.votes|pluralize }}</li>
-{% endfor %}
-</ul>
+    <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center">
+        {{ question.question_text }}
+    </h1>
 
-<a href="{% url 'polls:detail' question.id %}">Revoter ?</a>
+    <ul class="space-y-4">
+        {% for choice in question.choice_set.all %}
+            <li class="flex justify-between items-center bg-white p-4 rounded-xl shadow hover:shadow-lg transition">
+                <span class="text-gray-700 font-medium">{{ choice.choice_text }}</span>
+                <span class="text-gray-500 text-sm">
+                    {{ choice.votes }} vote{{ choice.votes|pluralize }}
+                </span>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <div class="mt-8 text-center">
+        <a href="{% url 'polls:detail' question.id %}"
+           class="inline-block px-6 py-3 bg-indigo-500 text-white rounded-xl hover:bg-indigo-600 transition shadow">
+            Revoter ?
+        </a>
+    </div>
+
+</div>
 
 {% endblock main %}

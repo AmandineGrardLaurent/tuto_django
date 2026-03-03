@@ -29,6 +29,11 @@ class QuestionForm(forms.ModelForm):
                 'max_length': 'La question est trop longue (max 200 caractères).'
             }
         }
+        widgets = {
+            'question_text': forms.TextInput(attrs={
+                'class': 'border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-indigo-500 w-full'
+            })
+        }
 
     def save(self, commit=True):
         """
@@ -74,6 +79,11 @@ class ChoiceForm(forms.ModelForm):
                 'required': 'Vous devez entrer un texte pour ce choix.',
                 'max_length': 'Le choix est trop long (max 200 caractères).'
             }
+        }
+        widgets = {
+            'choice_text': forms.TextInput(attrs={
+                'class': 'border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-indigo-500 w-full'
+            })
         }
 
 

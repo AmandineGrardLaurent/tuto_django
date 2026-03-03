@@ -1,4 +1,5 @@
 import datetime
+import locale
 
 from django.contrib import admin
 from django.db import models
@@ -40,7 +41,9 @@ class Question(models.Model):
 
         Affiche la date de publication suivie d'un extrait du texte.
         """
-        return "{} {}".format(text_excerpt(self.question_text, MAX_LENGTH), self.pub_date)
+        locale.setlocale(locale.LC_TIME, 'fr_FR.UTF-8')
+        formatted_date = self.pub_date.strftime("%d %B %Y, %H:%M")
+        return "{} ({})".format(text_excerpt(self.question_text, MAX_LENGTH), formatted_date)
 
     @admin.display(
         boolean=True,

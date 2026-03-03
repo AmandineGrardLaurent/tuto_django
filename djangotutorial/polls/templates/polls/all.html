@@ -1,26 +1,57 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block extra_head %}
-<link rel="stylesheet" href="{% static 'polls/style.css' %}">
-{% endblock %}
-
 {% block title %}Tous les sondages{% endblock %}
 
 {% block main %}
-<h1>Tous les sondages : </h1>
-{% if question_list %}
-    <ul>
-    {% for question in question_list %}
-        <li>
-            <a href="{% url 'polls:frequency' question.id %}">ID {{ question.id }} : {{ question.question_text }}</a>
-        </li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No polls are available.</p>
-{% endif %}
 
-<button><a href="{% url 'polls:index' %}">Retour</a></button>
+<div class="max-w-4xl mx-auto px-4 py-10">
 
-{% endblock main%}
+    <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center">
+        Tous les sondages
+    </h1>
+
+    {% if question_list %}
+        <ul class="space-y-4">
+        {% for question in question_list %}
+            <li class="bg-white p-5 rounded-2xl shadow-md hover:shadow-lg transition duration-300 flex justify-between items-center">
+
+                {# Question prend tout l'espace disponible #}
+                <a href="{% url 'polls:frequency' question.id %}"
+                   class="flex-1 text-lg font-medium text-indigo-600 hover:underline break-words">
+                    <span class="text-gray-500 font-normal">#{{ question.id }}</span> — {{ question.question_text }}
+                </a>
+
+                {# Boutons gardent leur taille naturelle #}
+                <div class="flex flex-none gap-3 ml-4">
+                    <a href="{% url 'polls:detail' question.id %}"
+                       class="px-4 py-2 bg-indigo-500 text-white rounded-xl hover:bg-indigo-600 transition shadow">
+                        Voter
+                    </a>
+
+                    <a href="{% url 'polls:frequency' question.id %}"
+                       class="px-4 py-2 bg-indigo-500 text-white rounded-xl hover:bg-indigo-600 transition shadow">
+                        Voir résultats
+                    </a>
+                </div>
+
+            </li>
+        {% endfor %}
+        </ul>
+
+    {% else %}
+        <div class="text-center text-gray-500 text-lg">
+            Aucun sondage disponible.
+        </div>
+    {% endif %}
+
+    <div class="mt-10 text-center">
+        <a href="{% url 'polls:index' %}"
+           class="inline-block px-6 py-3 bg-gray-800 text-white rounded-xl hover:bg-gray-900 transition shadow">
+            ← Retour à l'accueil
+        </a>
+    </div>
+
+</div>
+
+{% endblock main %}

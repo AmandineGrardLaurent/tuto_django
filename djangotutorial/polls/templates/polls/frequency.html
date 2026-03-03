@@ -1,22 +1,39 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block extra_head %}
-<link rel="stylesheet" href="{% static 'polls/style.css' %}">
-{% endblock %}
-
 {% block title %}Résultat du sondage{% endblock %}
 
 {% block main %}
-<fieldset>
-    <legend><h1>{{ question.question_text }}</h1></legend>
-        <ul>
-        {% for choice_text, choice_votes, choice_percentage in question.get_choices %}
-            <li>{{ choice_text }} -- {{ choice_votes }} vote{{ choice_votes|pluralize }} soit {{ choice_percentage | floatformat:1 }} %</li>
-        {% endfor %}
-        </ul>
-</fieldset>
 
-<button><a href="{% url 'polls:index' %}">Retour</a></button>
+<div class="max-w-3xl mx-auto px-4 py-10">
+
+    <fieldset class="bg-white p-8 rounded-2xl shadow-lg space-y-6">
+        <legend>
+            <h1 class="text-2xl font-bold text-gray-800 mb-4">
+                {{ question.question_text }}
+            </h1>
+        </legend>
+
+        <ul class="space-y-3">
+            {% for choice_text, choice_votes, choice_percentage in question.get_choices %}
+                <li class="flex justify-between items-center p-3 bg-gray-50 rounded-lg shadow-sm">
+                    <span class="text-gray-700 font-medium">{{ choice_text }}</span>
+                    <span class="text-gray-500 text-sm">
+                        {{ choice_votes }} vote{{ choice_votes|pluralize }} ({{ choice_percentage|floatformat:1 }}%)
+                    </span>
+                </li>
+            {% endfor %}
+        </ul>
+
+    </fieldset>
+
+    <div class="mt-6 text-center">
+        <a href="{% url 'polls:index' %}"
+           class="inline-block px-6 py-3 bg-gray-800 text-white rounded-xl hover:bg-gray-900 transition shadow">
+            ← Retour à l'accueil
+        </a>
+    </div>
+
+</div>
 
 {% endblock main %}

@@ -1,26 +1,29 @@
+{% load static tailwind_tags %}
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <title>
-        {% block title %}
-            Tuto Django
-        {% endblock title %}
+        {% block title %}Tuto Django{% endblock title %}
     </title>
-    {% block extra_head %}{% endblock %}
+    {% tailwind_css %}
 </head>
-<body>
-    <header>
-        <div id="header">
-            {% block header %}
-            {% endblock header %}
+<body class="bg-gray-50">
+
+    <header class="py-6 bg-gray-100 shadow-sm">
+        {% block header %}
+        <div class="flex justify-center">
+            <img src="{% static 'images/banniere.avif' %}"
+                 alt="logo"
+                 class="w-24 md:w-32 lg:w-40 rounded-xl shadow-md">
         </div>
+        {% endblock header %}
     </header>
-    <main>
-        <div id="main">
-            {% block main %}
-            {% endblock main %}
-        </div>
+
+    <main class="px-4 py-10">
+        {% block main %}{% endblock main %}
     </main>
+
 </body>
 </html>

@@ -1,47 +1,73 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block extra_head %}
-<link rel="stylesheet" href="{% static 'polls/style.css' %}">
-{% endblock %}
-
 {% block title %}Accueil{% endblock %}
-
-{% block header %}
-
-    <img src="{% static 'images/banniere.avif' %}"
-         alt="logo"
-         style="width:10%">
-
-{% endblock %}
 
 {% block main %}
 
+<div class="max-w-4xl mx-auto px-4 py-10">
+
 {% if latest_question_list %}
     <section>
-        <h1>Les dernières questions :</h1>
-        <ul>
+        <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center">
+            Les dernières questions
+        </h1>
+
+        <ul class="space-y-6">
         {% for question in latest_question_list %}
-            <li>
-                <a href="{% url 'polls:detail' question.id %}">
-                    {{ question.question_text }}
-                </a>
-                <button><a href="{% url 'polls:detail' question.id %}">Voter</a></button>
-                <button><a href="{% url 'polls:frequency' question.id %}">Résultats</a></button>
-                <p class="p-pub_date">-- publiée le {{ question.pub_date }} --</p>
+            <li class="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition duration-300">
+
+                <h2 class="text-xl font-semibold text-indigo-600 mb-3">
+                    <a href="{% url 'polls:detail' question.id %}"
+                       class="hover:underline">
+                        {{ question.question_text }}
+                    </a>
+                </h2>
+
+                <div class="flex flex-wrap gap-3 mb-4">
+                    <a href="{% url 'polls:detail' question.id %}"
+                       class="px-4 py-2 bg-indigo-500 text-white rounded-xl hover:bg-indigo-600 transition">
+                        Voter
+                    </a>
+
+                    <a href="{% url 'polls:frequency' question.id %}"
+                       class="px-4 py-2 bg-gray-200 text-gray-800 rounded-xl hover:bg-gray-300 transition">
+                        Résultats
+                    </a>
+                </div>
+
+                <p class="text-sm text-gray-500 italic">
+                    Publiée le {{ question.pub_date }}
+                </p>
 
             </li>
         {% endfor %}
         </ul>
 
-        <button><a href="{% url 'polls:all' %}">Toutes les questions</a></button>
-        <br>
-        <button><a href="{% url 'polls:statistics' %}">Statistiques</a></button>
-        <br>
-        <button><a href="{% url 'polls:poll' %}">Créer une nouvelle question</a></button>
+        <div class="mt-10 flex flex-wrap gap-4 justify-center">
+            <a href="{% url 'polls:all' %}"
+               class="px-5 py-3 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition shadow">
+                Toutes les questions
+            </a>
+
+            <a href="{% url 'polls:statistics' %}"
+               class="px-5 py-3 bg-green-500 text-white rounded-xl hover:bg-green-600 transition shadow">
+                Statistiques
+            </a>
+
+            <a href="{% url 'polls:poll' %}"
+               class="px-5 py-3 bg-purple-500 text-white rounded-xl hover:bg-purple-600 transition shadow">
+                Créer une question
+            </a>
+        </div>
     </section>
+
 {% else %}
-    <p>Aucun sondage disponible.</p>
+    <div class="text-center text-gray-500 text-lg">
+        Aucun sondage disponible.
+    </div>
 {% endif %}
+
+</div>
 
 {% endblock main %}
