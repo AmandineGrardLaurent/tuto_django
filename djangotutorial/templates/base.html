@@ -14,9 +14,11 @@
     <header class="py-6 bg-gray-100 shadow-sm">
         {% block header %}
         <div class="flex justify-center">
-            <img src="{% static 'images/banniere.avif' %}"
-                 alt="logo"
-                 class="w-24 md:w-32 lg:w-40 rounded-xl shadow-md">
+            <a href="{% url 'polls:index' %}">
+                <img src="{% static 'images/banniere.avif' %}"
+                     alt="logo"
+                     class="w-24 md:w-32 lg:w-40 rounded-xl shadow-md">
+            </a>
         </div>
         {% endblock header %}
     </header>
