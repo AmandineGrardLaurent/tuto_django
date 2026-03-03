@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'debug_toolbar',
+    'tailwind',
+    'tuto_theme',
 ]
 
 MIDDLEWARE = [
@@ -131,3 +133,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+
+TAILWIND_APP_NAME = 'tuto_theme'
+NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"
